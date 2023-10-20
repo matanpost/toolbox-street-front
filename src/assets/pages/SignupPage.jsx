@@ -12,13 +12,25 @@ const SignupPage = () => {
     const navigate = useNavigate()
     
     const handleSubmit = async() => {
-        console.log({username});
+        //console.log({username});
         const requestBody = { username, email, password };
         try {
             const response = await axios.post("http://localhost:5005/auth/signup", requestBody)
         //console.log(response.json());
         if (response.status === 201){
-            console.log("Signup is successful");
+            console.log("Signup is successful")
+            try {
+                const internalLogin = await axios.post("http://localhost:5005/auth/login", { username, password })
+                if (internalLogin.status === 200){
+               console.log("Logged in after signup");
+                navigate("/profile-page") 
+            }  
+            } catch (error) {
+                const errorDescription = error.response.data.message;
+                console.log("There was an error with the internal login.", errorDescription);
+            }
+            
+            
         }
         } catch (error) {
             const errorDescription = error.response.data.message;
