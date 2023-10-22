@@ -41,12 +41,20 @@ const AuthProviderWrapper = ({ children }) => {
     useEffect(()=>{
       if (token) {
         window.localStorage.setItem("authToken", token)
+        if(!isAuthenticated) {
+          setIsAuthenticated(true)
+        }
       }
     }, [token])
 
+    const logOutUser = () => {
+      localStorage.removeItem("authToken");
+      setIsloading(true)
+      setIsAuthenticated(false)
+    };
 
     
-    return <SessionContext.Provider value={{token, setToken, isLoading}}>{ children }</SessionContext.Provider>
+    return <SessionContext.Provider value={{token, setToken, isLoading, isAuthenticated,logOutUser}}>{ children }</SessionContext.Provider>
     
   }
   
